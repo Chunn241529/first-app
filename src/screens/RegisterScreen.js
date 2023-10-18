@@ -7,13 +7,14 @@ import Header from '../components/Header';
 import Button from '../components/Button';
 import TextInput from '../components/TextInput';
 import BackButton from '../components/BackButton';
-import { theme } from '../core/theme'; // Đây là dòng import theme từ đúng đường dẫn
+import { theme } from '../core/theme';
 import { emailValidator } from '../helpers/emailValidator';
 import { passwordValidator } from '../helpers/passwordValidator';
 import { nameValidator } from '../helpers/nameValidator';
 import * as ImagePicker from 'expo-image-picker';
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import { ref, set, getDatabase } from 'firebase/database';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function RegisterScreen({ navigation }) {
   const [name, setName] = useState({ value: '', error: '' });
@@ -23,6 +24,7 @@ export default function RegisterScreen({ navigation }) {
   const [phone, setPhone] = useState({ value: '', error: '' });
   const [facebook, setFacebook] = useState({ value: '', error: '' });
   const [linkedin, setLinkedin] = useState({ value: '', error: '' });
+  const [description, setDescription] = useState({ value: '', error: '' });
   const [image, setImage] = useState(null);
   const [currentStep, setCurrentStep] = useState(1);
 
@@ -41,6 +43,10 @@ export default function RegisterScreen({ navigation }) {
 
       setCurrentStep(2);
     } else if (currentStep === 2) {
+      setCurrentStep(3); // Chuyển đến bước 3
+    } else if (currentStep === 3) {
+      setCurrentStep(4); // Chuyển đến bước 3
+    } else if (currentStep === 4) {
       try {
         const auth = getAuth();
         const authUser = await createUserWithEmailAndPassword(auth, email.value, password.value);
@@ -49,6 +55,7 @@ export default function RegisterScreen({ navigation }) {
         const database = getDatabase();
         const dbRef = ref(database, `users/${userUid}`);
 
+        // Lưu thông tin người dùng vào cơ sở dữ liệu, bao gồm đường dẫn hình ảnh
         set(dbRef, {
           name: name.value,
           email: email.value,
@@ -56,9 +63,14 @@ export default function RegisterScreen({ navigation }) {
           phone: phone.value,
           facebook: "https://" + facebook.value,
           linkedin: "https://" + linkedin.value,
+          image: image, // Lưu đường dẫn hình ảnh vào cơ sở dữ liệu
+          description: description.value,
         });
 
-        setCurrentStep(3);
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Dashboard' }],
+        });
       } catch (error) {
         Alert.alert('Lỗi đăng ký', 'Đã xảy ra lỗi khi đăng ký tài khoản. Vui lòng thử lại sau.');
       }
@@ -81,7 +93,7 @@ export default function RegisterScreen({ navigation }) {
     });
 
     if (!result.canceled) {
-      setImage(result.uri);
+      setImage(result.assets[0].uri);
     }
   };
 
@@ -148,7 +160,7 @@ export default function RegisterScreen({ navigation }) {
           />
           <TextInput
             label="LinkedIn"
-            returnKeyType="done"
+            returnKeyType="next"
             value={linkedin.value}
             onChangeText={(text) => setLinkedin({ value: text, error: '' })}
           />
@@ -169,12 +181,23 @@ export default function RegisterScreen({ navigation }) {
           )}
         </>
       )}
+      {currentStep === 4 && (
+        <>
+          <TextInput
+            label="Mô tả bản thân"
+            returnKeyType="done"
+            value={description.value}
+            onChangeText={(text) => setDescription({ value: text, error: '' })}
+            multiline
+          />
+        </>
+      )}
       <Button
         mode="contained"
         onPress={onSignUpPressed}
         style={{ marginTop: 24 }}
       >
-        {currentStep === 1 ? 'Tiếp tục' : currentStep === 2 ? 'Tiếp tục' : 'Đăng ký'}
+        {currentStep === 1 ? 'Tiếp tục' : currentStep === 2 ? 'Tiếp tục' : currentStep === 3 ? 'Tiếp tục' : 'Đăng ký'}
       </Button>
       {currentStep === 1 && (
         <View style={styles.row}>

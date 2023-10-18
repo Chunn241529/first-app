@@ -1,30 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Image } from 'react-native';
-import { Text, Button, IconButton } from 'react-native-paper';
+import { Text, IconButton } from 'react-native-paper';
 import Background from '../components/Background';
-import Logo from '../components/Logo';
-import { ref, get } from 'firebase/database'; // Import thêm phần này
-import { auth, database } from '../../firebase'; // Import auth từ tệp firebase.js
+import { ref, get } from 'firebase/database';
+import { auth, database } from '../../firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Linking } from 'react-native';
-
+import { Linking, Share } from 'react-native';
 
 export default function Dashboard({ navigation }) {
   const [userData, setUserData] = useState({
     image: null,
     name: '',
     phone: '',
-    roleUser: '',
-    template: '',
+    companyName: '',
     description: '',
     facebook: '',
     linkedin: '',
   });
 
-  useEffect(() => {
-    // Lấy thông tin người dùng từ Firebase Realtime Database
-    const userId = auth.currentUser.uid; // Lấy ID của người dùng đã đăng nhập
+  const [profileURL, setProfileURL] = useState('');
 
+  useEffect(() => {
+    const userId = auth.currentUser.uid;
     const dbRef = ref(database, `users/${userId}`);
 
     get(dbRef)
@@ -35,12 +32,15 @@ export default function Dashboard({ navigation }) {
             image: data.image,
             name: data.name,
             phone: data.phone,
-            roleUser: data.roleUser,
-            template: data.template,
+            companyName: data.companyName,
             description: data.description,
             facebook: data.facebook,
             linkedin: data.linkedin,
           });
+
+          // Tạo URL cho trang profile
+          const profileURL = `exp://192.168.1.42:8081/users/${userId}`;
+          setProfileURL(profileURL); // Thay 'example.com' bằng domain thực tế của bạn
         } else {
           console.log('Không tìm thấy dữ liệu người dùng.');
         }
@@ -52,12 +52,11 @@ export default function Dashboard({ navigation }) {
 
   return (
     <Background>
-      {/* ... */}
       <View style={styles.card}>
         <IconButton
           icon="arrow-left"
           color="#000"
-          size={30}
+          size={20}
           onPress={() =>
             navigation.reset({
               index: 0,
@@ -71,10 +70,8 @@ export default function Dashboard({ navigation }) {
           source={{ uri: userData.image }}
         />
         <Text style={styles.name}>{userData.name}</Text>
-        <Text style={styles.title}>{userData.roleUser}</Text>
+        <Text style={styles.title}>{userData.companyName}</Text>
         <Text style={styles.description}>{userData.description}</Text>
-        {/* <Text style={styles.phone}>{userData.phone}</Text> */}
-        {/* <Text style={styles.template}>{userData.template}</Text> */}
 
         <View style={styles.iconRow}>
           <Icon
@@ -108,22 +105,18 @@ export default function Dashboard({ navigation }) {
               }
             }}
           />
+          <Icon
+            name="share"
+            style={styles.icon}
+            size={30}
+            onPress={() => {
+              Share.share({
+                message: `Xem profile của ${userData.name}: ${profileURL}`,
+              });
+            }}
+          />
         </View>
-
       </View>
-      {/* <Button
-        mode="outlined"
-        onPress={() =>
-          navigation.reset({
-            index: 0,
-            routes: [{ name: 'StartScreen' }],
-          })
-        }
-      >
-        Đăng xuất
-      </Button> */}
-
-
     </Background>
   );
 }
@@ -163,11 +156,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#777',
   },
-  phone: {
-    fontSize: 16,
-    color: '#555',
-    paddingTop: 10,
-  },
   iconRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -176,19 +164,14 @@ const styles = StyleSheet.create({
   icon: {
     padding: 20,
     marginRight: 5,
-    color: '#3B5998', // Màu của biểu tượng Facebook (màu xanh Facebook)
+    color: '#3B5998',
   },
-  facebook: {
-    fontSize: 16,
-    color: '#555',
-  },
-  linkedin: {
-    fontSize: 16,
-    color: '#555',
+  shareIcon: {
+    position: 'absolute',
+    right: 1,
   },
   leftIcon: {
     position: 'absolute',
     left: 1,
   },
-
 });
