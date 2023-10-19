@@ -77,7 +77,7 @@ export default function RegisterScreen({ navigation }) {
               onPress: () => {
                 navigation.reset({
                   index: 0,
-                  routes: [{ name: 'Dashboard' }],
+                  routes: [{ name: 'ProfileScreen' }],
                 });
               },
             },

@@ -7,7 +7,7 @@ import { auth, database } from '../../firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Linking, Share } from 'react-native';
 
-export default function Dashboard({ navigation }) {
+export default function ProfileScreen({ navigation }) {
   const [userData, setUserData] = useState({
     image: null,
     name: '',
@@ -39,7 +39,7 @@ export default function Dashboard({ navigation }) {
           });
 
           // Tạo URL cho trang profile
-          const profileURL = `exp://192.168.1.42:8081/users/${userId}`;
+          const profileURL = `http://localhost:5000/users/${userId}`;
           setProfileURL(profileURL); // Thay 'example.com' bằng domain thực tế của bạn
         } else {
           console.log('Không tìm thấy dữ liệu người dùng.');
