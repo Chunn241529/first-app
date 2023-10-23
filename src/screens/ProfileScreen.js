@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image, Alert} from 'react-native';
 import { Text, IconButton } from 'react-native-paper';
 import Background from '../components/Background';
 import { ref, get } from 'firebase/database';
@@ -58,12 +58,39 @@ export default function ProfileScreen({ navigation }) {
           color="#000"
           size={20}
           onPress={() =>
-            navigation.reset({
-              index: 0,
-              routes: [{ name: 'StartScreen' }],
-            })
+            Alert.alert(
+              'Xác nhận',
+              'Bạn có chắc muốn đăng xuất?',
+              [
+                {
+                  text: 'Hủy',
+                  style: 'cancel',
+                },
+                {
+                  text: 'Đồng ý',
+                  onPress: () =>
+                    navigation.reset({
+                      index: 0,
+                      routes: [{ name: 'StartScreen' }],
+                    }),
+                },
+              ],
+              { cancelable: false }
+            )
           }
           style={styles.leftIcon}
+        />
+        <IconButton
+          icon="pencil"
+          color="#000"
+          size={20}
+          onPress={() =>
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'EditScreen' }],
+            })
+          }
+          style={styles.rightIcon}
         />
         <Image
           style={styles.avatar}
@@ -174,4 +201,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 1,
   },
+  rightIcon: {
+    position: 'absolute',
+    right: 1,
+  }
 });

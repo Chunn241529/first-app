@@ -9,7 +9,8 @@ import {
   RegisterScreen,
   ResetPasswordScreen,
   ProfileScreen,
-  // Thêm TodoListScreen vào danh sách import
+  EditScreen,
+  
 } from './src/screens';
 
 const Stack = createStackNavigator();
@@ -24,12 +25,13 @@ export default function App() {
             headerShown: false,
           }}
         >
-          <Stack.Screen name="StartScreen" component={StartScreen} />
+          <Stack.Screen name="StartScreen" component={StartScreen} /> 
+          <Stack.Screen name="EditScreen" component={EditScreen} />
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
           <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
           <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
-          <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} />
-          {/* Thêm TodoListScreen vào danh sách màn hình */}
+          <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} /> 
+    
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>
