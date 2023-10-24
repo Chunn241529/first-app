@@ -24,6 +24,7 @@ export default function RegisterScreen({ navigation }) {
   const [phone, setPhone] = useState({ value: '', error: '' });
   const [facebook, setFacebook] = useState({ value: '', error: '' });
   const [linkedin, setLinkedin] = useState({ value: '', error: '' });
+  const [role, setRole] = useState({ value: '', error: '' });
   const [description, setDescription] = useState({ value: '', error: '' });
   const [image, setImage] = useState(null);
   const [currentStep, setCurrentStep] = useState(1);
@@ -66,6 +67,7 @@ export default function RegisterScreen({ navigation }) {
             phone: phone.value,
             facebook: "https://facebook.com/" + facebook.value,
             linkedin: "https://linkedin.com/" + linkedin.value,
+            role: "user",
             image: imageURL,
             description: description.value,
           });
