@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { ref, set, get } from 'firebase/database';
 import { database, auth } from '../../firebase'; // Import Firebase configuration
 import { getStorage, ref as storageRef1, uploadBytes, getDownloadURL } from 'firebase/storage';
+import SpinnerOverlay from 'react-native-loading-spinner-overlay'; // Import thư viện
 
 export default function EditScreen({ navigation }) {
   const [name, setName] = useState({ value: '', error: '' });
@@ -20,6 +21,7 @@ export default function EditScreen({ navigation }) {
   const [linkedin, setLinkedin] = useState({ value: '', error: '' });
   const [description, setDescription] = useState({ value: '', error: '' });
   const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchDataFromDatabase();
@@ -52,9 +54,12 @@ export default function EditScreen({ navigation }) {
         Alert.alert('Vui lòng chọn một hình ảnh trước khi lưu.');
         return;
       }
+      setLoading(true);
 
       const imageURL = await uploadImage(image); // Upload hình ảnh lên Firebase Storage
+      setTimeout(() => {
 
+      }, 2000);
       const userUid = auth.currentUser.uid;
       const userRef = ref(database, `users/${userUid}`);
 

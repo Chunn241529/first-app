@@ -43,6 +43,17 @@ export default function ProfileScreen({ navigation }) {
           setProfileURL(profileURL); // Thay 'example.com' bằng domain thực tế của bạn
         } else {
           console.log('Không tìm thấy dữ liệu người dùng.');
+          Alert.alert('Lỗi dữ liệu!', 'Không tìm thấy dữ liệu người dùng..', [
+            {
+              text: 'Quay lại',
+              onPress: () => {
+                navigation.reset({
+                  index: 0,
+                  routes: [{ name: 'LoginScreen' }],
+                });
+              },
+            },
+          ]);
         }
       })
       .catch((error) => {

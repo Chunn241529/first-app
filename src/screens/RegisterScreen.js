@@ -15,6 +15,9 @@ import * as ImagePicker from 'expo-image-picker';
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import { ref, set, getDatabase } from 'firebase/database';
 import { getStorage, ref as storageRef1, uploadBytes, getDownloadURL } from 'firebase/storage';
+// import Modal from 'react-native-modal';
+import SpinnerOverlay from 'react-native-loading-spinner-overlay'; // Import thư viện
+
 
 export default function RegisterScreen({ navigation }) {
   const [name, setName] = useState({ value: '', error: '' });
@@ -28,8 +31,10 @@ export default function RegisterScreen({ navigation }) {
   const [description, setDescription] = useState({ value: '', error: '' });
   const [image, setImage] = useState(null);
   const [currentStep, setCurrentStep] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const onSignUpPressed = async () => {
+    // setLoading(true);
     if (currentStep === 1) {
       const nameError = nameValidator(name.value);
       const emailError = emailValidator(email.value);
@@ -47,11 +52,16 @@ export default function RegisterScreen({ navigation }) {
       setCurrentStep(3);
     } else if (currentStep === 3) {
       try {
+
         const imagePickerResult = await pickImage();
 
         if (!imagePickerResult.canceled) {
+          setLoading(true);
           const imageURL = await uploadImage(imagePickerResult.assets[0].uri);
-          setImage(imageURL);
+          setTimeout(() => {
+            setImage(imageURL);
+          }, 2000);
+
 
           const auth = getAuth();
           const authUser = await createUserWithEmailAndPassword(auth, email.value, password.value);
@@ -59,6 +69,7 @@ export default function RegisterScreen({ navigation }) {
           const userUid = authUser.user.uid;
           const database = getDatabase();
           const dbRef = ref(database, `users/${userUid}`);
+
 
           set(dbRef, {
             name: name.value,
@@ -71,7 +82,7 @@ export default function RegisterScreen({ navigation }) {
             image: imageURL,
             description: description.value,
           });
-
+          setLoading(false);
           // Hiển thị cảnh báo thành công và sau đó chuyển qua Dashboard
           Alert.alert('Đăng ký thành công!', 'Chúc bạn có một trải nghiệm vui vẻ.', [
             {
@@ -84,10 +95,13 @@ export default function RegisterScreen({ navigation }) {
               },
             },
           ]);
+
+
         }
       } catch (error) {
         Alert.alert('Lỗi đăng ký', 'Đã xảy ra lỗi khi đăng ký tài khoản. Vui lòng thử lại sau.');
         console.log(error);
+        setLoading(false);
       }
     }
   };
@@ -109,12 +123,15 @@ export default function RegisterScreen({ navigation }) {
   };
 
   const uploadImage = async (uri) => {
+
     const storage = getStorage();
     const storageRef = storageRef1(storage, 'avatars/' + new Date().getTime() + '.jpg');
     const response = await fetch(uri);
     const blob = await response.blob();
     const snapshot = await uploadBytes(storageRef, blob);
+
     return getDownloadURL(snapshot.ref);
+
   };
 
   return (
@@ -226,6 +243,11 @@ export default function RegisterScreen({ navigation }) {
               </TouchableOpacity>
             </View>
           )}
+          {/* Loading animation */}
+          <SpinnerOverlay
+            visible={loading}
+            color="rgba(0, 0, 0, 0.5)"
+          />
         </Background>
       </View>
 
