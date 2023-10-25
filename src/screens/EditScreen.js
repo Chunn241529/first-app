@@ -54,12 +54,10 @@ export default function EditScreen({ navigation }) {
         Alert.alert('Vui lòng chọn một hình ảnh trước khi lưu.');
         return;
       }
-      setLoading(true);
+
 
       const imageURL = await uploadImage(image); // Upload hình ảnh lên Firebase Storage
-      setTimeout(() => {
 
-      }, 2000);
       const userUid = auth.currentUser.uid;
       const userRef = ref(database, `users/${userUid}`);
 
@@ -101,7 +99,11 @@ export default function EditScreen({ navigation }) {
     });
 
     if (!imagePickerResult.canceled) {
-      setImage(imagePickerResult.assets[0].uri);
+      setLoading(true);
+      setTimeout(() => {
+        setImage(imagePickerResult.assets[0].uri);
+      }, 2000);
+
     }
   };
 
@@ -178,6 +180,10 @@ export default function EditScreen({ navigation }) {
           <Button mode="contained" onPress={onSavePressed} style={{ marginTop: 24 }}>
             Lưu thay đổi
           </Button>
+          <SpinnerOverlay
+            visible={loading}
+            color="rgba(0, 0, 0, 0.5)"
+          />
         </Background>
       </ScrollView>
     </TouchableWithoutFeedback>

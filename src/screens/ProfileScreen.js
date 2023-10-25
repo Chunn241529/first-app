@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Image, Alert} from 'react-native';
+import { View, StyleSheet, Image, Alert } from 'react-native';
 import { Text, IconButton } from 'react-native-paper';
 import Background from '../components/Background';
 import { ref, get } from 'firebase/database';
 import { auth, database } from '../../firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Linking, Share } from 'react-native';
+import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
+
 
 export default function ProfileScreen({ navigation }) {
   const [userData, setUserData] = useState({
@@ -39,7 +41,7 @@ export default function ProfileScreen({ navigation }) {
           });
 
           // Tạo URL cho trang profile
-          const profileURL = `http://localhost:5000/users/${userId}`;
+          const profileURL = `http://localhost:5000/detail.html?=${userId}`;
           setProfileURL(profileURL); // Thay 'example.com' bằng domain thực tế của bạn
         } else {
           console.log('Không tìm thấy dữ liệu người dùng.');
@@ -59,7 +61,37 @@ export default function ProfileScreen({ navigation }) {
       .catch((error) => {
         console.error('Lỗi khi truy cập dữ liệu:', error);
       });
+    NfcManager.start();
+    NfcManager.setEventListener(NfcTech.Ndef, (tag) => {
+      // Xử lý sự kiện khi thẻ NFC được đọc
+      if (tag.ndefMessage) {
+        // Lấy dữ liệu từ thẻ NFC
+        const data = tag.ndefMessage[0].payload;
+        const text = Ndef.text.decodePayload(data);
+
+        // Làm cái gì đó với dữ liệu, ví dụ: gửi URL lên server hoặc mở trình duyệt
+        console.log(text);
+      }
+    });
+
+    return () => {
+      NfcManager.setEventListener(NfcTech.Ndef, null);
+      NfcManager.stop();
+    };
   }, []);
+
+  const writeURLToNFC = async (url) => {
+    try {
+      const bytes = Ndef.text.encodePayload(url);
+      await NfcManager.requestTechnology(NfcTech.Ndef);
+      await NfcManager.writeNdefMessage([{ ndefMessage: bytes }]);
+      await NfcManager.cancelTechnologyRequest();
+      Alert.alert('Thành công', 'Đã ghi URL vào thẻ NFC.');
+    } catch (ex) {
+      console.warn(ex);
+      Alert.alert('Lỗi', 'Không thể ghi URL vào thẻ NFC.');
+    }
+  };
 
   return (
     <Background>
@@ -148,9 +180,7 @@ export default function ProfileScreen({ navigation }) {
             style={styles.icon}
             size={30}
             onPress={() => {
-              Share.share({
-                message: `Xem profile của ${userData.name}: ${profileURL}`,
-              });
+              writeURLToNFC(profileURL);
             }}
           />
         </View>
