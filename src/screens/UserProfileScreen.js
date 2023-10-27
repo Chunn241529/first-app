@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ImageBackground, View, Text, StyleSheet, Image, TextInput, ScrollView, TouchableOpacity } from 'react-native';
+import { Alert, ImageBackground, View, Text, StyleSheet, Image, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { theme } from '../core/theme';
 import { IconButton } from 'react-native-paper';
@@ -127,18 +127,18 @@ export default function UserProfileScreen({ navigation }) {
                         <TouchableOpacity
                             style={styles.userProfileItem}
                             onPress={() => {
-                                navigation.navigate('ProfileScreen');
+                                Alert.alert('Tính năng chưa hoạt động', 'Bạn hãy cố gắng chờ tính năng này ra mắt nhé.')
                             }}
 
                         >
                             <IconButton
-                                icon="chat"
+                                icon="card"
                                 color="#000"
                                 size={30}
                                 style={styles.icon}
                             />
                             <View style={styles.userInfo}>
-                                <Text style={styles.title_body}>Chat</Text>
+                                <Text style={styles.title_body}>NFC</Text>
                             </View>
                             <IconButton
                                 icon="chevron-right"
@@ -151,7 +151,7 @@ export default function UserProfileScreen({ navigation }) {
                         <TouchableOpacity
                             style={styles.userProfileItem}
                             onPress={() => {
-                                navigation.navigate('ProfileScreen');
+                                Alert.alert('Tính năng chưa hoạt động', 'Bạn hãy cố gắng chờ tính năng này ra mắt nhé.')
                             }}
 
                         >
@@ -174,7 +174,22 @@ export default function UserProfileScreen({ navigation }) {
                         <TouchableOpacity
                             style={styles.userProfileItem}
                             onPress={() => {
-                                navigation.navigate('LoginScreen');
+                                Alert.alert('Đăng xuất', 'Bạn có chắc chắn muốn đăng xuất?', [
+                                    {
+                                        text: 'Đăng xuất',
+                                        onPress: () => {
+                                            // Điều hướng đến màn hình LoginScreen
+                                            navigation.reset({
+                                                index: 0,
+                                                routes: [{ name: 'LoginScreen' }],
+                                            });
+                                        },
+                                    },
+                                    {
+                                        text: 'Hủy',
+                                        style: 'cancel',
+                                    },
+                                ]);
                             }}
 
                         >
@@ -222,7 +237,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         position: 'absolute',
         top: '7%',
-        
+
     },
     avatar: {
         width: 150,
@@ -248,7 +263,7 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         margin: 10,
         // borderWidth: 0.5,
-        marginTop: '75%',
+        marginTop: '70%',
         paddingTop: 10,
     },
     title_body: {
