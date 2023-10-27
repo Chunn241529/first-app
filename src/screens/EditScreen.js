@@ -11,7 +11,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { ref, set, get } from 'firebase/database';
 import { database, auth } from '../../firebase'; // Import Firebase configuration
 import { getStorage, ref as storageRef1, uploadBytes, getDownloadURL } from 'firebase/storage';
-import SpinnerOverlay from 'react-native-loading-spinner-overlay'; // Import thư viện
 
 export default function EditScreen({ navigation }) {
   const [name, setName] = useState({ value: '', error: '' });
@@ -21,7 +20,7 @@ export default function EditScreen({ navigation }) {
   const [linkedin, setLinkedin] = useState({ value: '', error: '' });
   const [description, setDescription] = useState({ value: '', error: '' });
   const [image, setImage] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [profiles, setProfiles] = useState(''); // Lưu trữ giá trị trường "profiles"
 
   useEffect(() => {
     fetchDataFromDatabase();
@@ -42,6 +41,7 @@ export default function EditScreen({ navigation }) {
         setLinkedin({ value: userData.linkedin, error: '' });
         setDescription({ value: userData.description, error: '' });
         setImage(userData.image);
+        setProfiles(userData.profiles); // Lấy giá trị trường "profiles"
       }
     } catch (error) {
       console.error('Lỗi khi lấy dữ liệu từ cơ sở dữ liệu:', error);
@@ -55,12 +55,12 @@ export default function EditScreen({ navigation }) {
         return;
       }
 
-
-      const imageURL = await uploadImage(image); // Upload hình ảnh lên Firebase Storage
+      const imageURL = await uploadImage(image);
 
       const userUid = auth.currentUser.uid;
       const userRef = ref(database, `users/${userUid}`);
 
+      // Chỉ cập nhật các trường đã thay đổi và giữ nguyên trường "profiles"
       await set(userRef, {
         name: name.value,
         companyName: companyName.value,
@@ -68,14 +68,15 @@ export default function EditScreen({ navigation }) {
         facebook: facebook.value,
         linkedin: linkedin.value,
         description: description.value,
-        image: imageURL, // Lưu URL của hình ảnh
+        image: imageURL,
+        profiles: profiles, // Giữ nguyên giá trị trường "profiles"
       });
 
       Alert.alert('Cập nhật thành công!', 'Thông tin của bạn đã được cập nhật.');
 
       navigation.reset({
         index: 0,
-        routes: [{ name: 'ProfileScreen' }],
+        routes: [{ name: 'Dashboard' }],
       });
     } catch (error) {
       console.error('Lỗi khi cập nhật thông tin:', error);
@@ -99,11 +100,7 @@ export default function EditScreen({ navigation }) {
     });
 
     if (!imagePickerResult.canceled) {
-      setLoading(true);
-      setTimeout(() => {
-        setImage(imagePickerResult.assets[0].uri);
-      }, 2000);
-
+      setImage(imagePickerResult.assets[0].uri);
     }
   };
 
@@ -113,7 +110,7 @@ export default function EditScreen({ navigation }) {
     const response = await fetch(uri);
     const blob = await response.blob();
     const snapshot = await uploadBytes(storageRef, blob);
-    return getDownloadURL(snapshot.ref); // Trả về URL của hình ảnh sau khi upload
+    return getDownloadURL(snapshot.ref);
   };
 
   return (
@@ -180,16 +177,12 @@ export default function EditScreen({ navigation }) {
           <Button mode="contained" onPress={onSavePressed} style={{ marginTop: 24 }}>
             Lưu thay đổi
           </Button>
-          <SpinnerOverlay
-            visible={loading}
-            color="rgba(0, 0, 0, 0.5)"
-          />
         </Background>
       </ScrollView>
     </TouchableWithoutFeedback>
   );
-
 }
+
 const styles = StyleSheet.create({
   leftIcon: {
     position: 'absolute',

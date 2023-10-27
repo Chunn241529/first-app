@@ -86,10 +86,13 @@ export default function Dashboard({ navigation }) {
             <View style={styles.container}>
                 <View style={styles.headerContainer}>
                     <Text style={styles.title}>Trang chủ</Text>
+
                     <Image
                         source={{ uri: userData.image }}
                         style={styles.avatar}
                     />
+
+
                 </View>
                 <View style={styles.searchContainer}>
                     <View style={styles.searchInputContainer}>

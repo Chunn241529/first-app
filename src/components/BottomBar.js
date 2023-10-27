@@ -19,7 +19,7 @@ export default function BottomBar({ navigation }) {
             </TouchableOpacity>
             <TouchableOpacity
                 style={styles.bottomBarItem}
-                onPress={() => navigation.navigate('UserScreen')}
+                onPress={() => navigation.navigate('UserProfileScreen')}
             >
                 <Icon name="user" size={30} color="black" />
             </TouchableOpacity>

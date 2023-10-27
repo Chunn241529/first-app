@@ -13,6 +13,7 @@ import {
   Dashboard,
   AddScreen,
   UserScreen,
+  UserProfileScreen,
 } from './src/screens';
 
 const Stack = createStackNavigator();
@@ -36,6 +37,7 @@ export default function App() {
           <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
           <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} />
           <Stack.Screen name="UserScreen" component={UserScreen} />
+          <Stack.Screen name="UserProfileScreen" component={UserProfileScreen} />
 
         </Stack.Navigator>
       </NavigationContainer>

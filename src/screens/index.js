@@ -7,3 +7,4 @@ export { default as EditScreen } from './EditScreen';
 export { default as Dashboard } from './Dashboard';
 export { default as AddScreen } from './AddScreen';
 export { default as UserScreen } from './UserScreen';
+export { default as UserProfileScreen } from './UserProfileScreen'
