@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, ImageBackground, View, Text, StyleSheet, Image, TextInput, ScrollView, TouchableOpacity } from 'react-native';
+import { Alert, ImageBackground, View, Text, StyleSheet, Image, TextInput, ScrollView, TouchableOpacity, Share } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { theme } from '../core/theme';
 import { IconButton } from 'react-native-paper';
@@ -104,7 +104,9 @@ export default function UserProfileScreen({ navigation }) {
                         <TouchableOpacity
                             style={styles.userProfileItem}
                             onPress={() => {
-                                navigation.navigate('ProfileScreen');
+                                Share.share({
+                                    message: `${profileURL}`,
+                                });
                             }}
 
                         >
@@ -224,7 +226,7 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         height: '100%',
-        backgroundColor: '#F5F5F5',
+        backgroundColor: theme.colors.surface,
         resizeMode: 'cover',
     },
     container: {
@@ -258,13 +260,20 @@ const styles = StyleSheet.create({
 
     boxBody: {
         flex: 1,
-        width: '100%',
+        width: '99%',
         backgroundColor: 'white',
         borderRadius: 30,
         margin: 10,
         // borderWidth: 0.5,
         marginTop: '70%',
         paddingTop: 10,
+        shadowColor: 'black',      // Màu của shadow
+        shadowOffset: {
+            width: 0,              // Điều chỉnh độ dài và độ rộng của shadow
+            height: 0,
+        },
+        shadowOpacity: 0.5,       // Điều chỉnh độ trong suốt của shadow
+        shadowRadius: 3,
     },
     title_body: {
         fontSize: 18,
@@ -286,7 +295,6 @@ const styles = StyleSheet.create({
     userProfileItem: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#ffffff',
         // borderWidth: 1,
         // borderRadius: 10,
         margin: 10,

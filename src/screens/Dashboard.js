@@ -9,6 +9,8 @@ import BottomBar from '../components/BottomBar';
 
 export default function Dashboard({ navigation }) {
     const [userProfiles, setUserProfiles] = useState([]);
+    const [searchText, setSearchText] = useState('');
+    const [sortOrder, setSortOrder] = useState('A-Z');
     const [userData, setUserData] = useState({
         image: null,
         name: '',
@@ -17,6 +19,19 @@ export default function Dashboard({ navigation }) {
         description: '',
         facebook: '',
         linkedin: '',
+    });
+
+    const filteredUserProfiles = userProfiles.filter((profile) =>
+        profile.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+
+    const sortedUserProfiles = [...filteredUserProfiles];
+    sortedUserProfiles.sort((a, b) => {
+        if (sortOrder === 'A-Z') {
+            return a.name.localeCompare(b.name);
+        } else {
+            return b.name.localeCompare(a.name);
+        }
     });
 
     const [profileURL, setProfileURL] = useState('');
@@ -86,11 +101,18 @@ export default function Dashboard({ navigation }) {
             <View style={styles.container}>
                 <View style={styles.headerContainer}>
                     <Text style={styles.title}>Trang chủ</Text>
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate('UserProfileScreen');
+                        }}
+                    >
+                        <Image
+                            source={{ uri: userData.image }}
+                            style={styles.avatar}
 
-                    <Image
-                        source={{ uri: userData.image }}
-                        style={styles.avatar}
-                    />
+                        />
+                    </TouchableOpacity>
+
 
 
                 </View>
@@ -99,6 +121,8 @@ export default function Dashboard({ navigation }) {
                         <TextInput
                             style={styles.searchInput}
                             placeholder="Tìm kiếm"
+                            value={searchText}
+                            onChangeText={(text) => setSearchText(text)}
                         />
                         <Icon name="search" size={20} style={styles.searchIcon} />
                     </View>
@@ -106,19 +130,16 @@ export default function Dashboard({ navigation }) {
                         icon="filter"
                         color="#000"
                         size={20}
-                        onPress={() =>
-                            navigation.reset({
-                                index: 0,
-                                routes: [{ name: 'EditScreen' }],
-                            })
-                        }
+                        onPress={() => {
+                            setSortOrder(sortOrder === 'A-Z' ? 'Z-A' : 'A-Z');
+                        }}
                         style={styles.rightIcon}
                     />
                 </View>
                 <View style={styles.boxBody}>
                     <Text style={styles.title_body}>Hồ sơ của bạn</Text>
                     <ScrollView>
-                        {userProfiles.map((profile, index) => (
+                        {sortedUserProfiles.map((profile, index) => (
                             <TouchableOpacity
                                 style={styles.userProfileItem}
                                 onPress={() => {
@@ -133,6 +154,10 @@ export default function Dashboard({ navigation }) {
                                 </View>
                             </TouchableOpacity>
                         ))}
+
+                        {/* {userProfiles.map((profile, index) => (
+                          
+                        ))} */}
                     </ScrollView>
                 </View>
             </View>
@@ -205,13 +230,20 @@ const styles = StyleSheet.create({
     },
     boxBody: {
         flex: 1,
-        width: '100%',
+        width: '99%',
         backgroundColor: 'white',
-        borderRadius: 20,
+        borderRadius: 30,
         margin: 10,
-        borderWidth: 0.5,
         marginTop: '45%',
         paddingTop: 10,
+        // Thêm shadow chi tiết
+        shadowColor: 'black',      // Màu của shadow
+        shadowOffset: {
+            width: 0,              // Điều chỉnh độ dài và độ rộng của shadow
+            height: 0,
+        },
+        shadowOpacity: 0.5,       // Điều chỉnh độ trong suốt của shadow
+        shadowRadius: 3,
     },
     title_body: {
         fontSize: 20,
@@ -224,7 +256,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: '#ffffff',
-        borderWidth: 1,
+        // borderWidth: 1,
         borderRadius: 10,
         margin: 10,
         padding: 10,

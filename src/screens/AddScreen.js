@@ -90,7 +90,7 @@ export default function AddScreen({ navigation }) {
 
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-           
+
             <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
                 <Background>
 
@@ -108,9 +108,9 @@ export default function AddScreen({ navigation }) {
                     />
                     <TouchableOpacity onPress={pickImage}>
                         {image ? (
-                            <Image source={{ uri: image }} style={{ width: 200, height: 200, borderRadius: 100 }} />
+                            <Image source={{ uri: image }} style={{ width: 150, height: 150, borderRadius: 100 }} />
                         ) : (
-                            <Image source={require('../assets/path_to_default_image.png')} style={{ width: 200, height: 200, borderRadius: 100 }} />
+                            <Image source={require('../assets/path_to_default_image.png')} style={{ width: 150, height: 150, borderRadius: 100 }} />
                         )}
                     </TouchableOpacity>
                     <TextInput

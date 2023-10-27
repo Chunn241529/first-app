@@ -117,11 +117,10 @@ export default function EditScreen({ navigation }) {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
         <Background>
-          <Header>Chỉnh sửa thông tin</Header>
           <IconButton
             icon="arrow-left"
             color="#000"
-            size={20}
+            size={30}
             onPress={() =>
               navigation.reset({
                 index: 0,
@@ -132,9 +131,9 @@ export default function EditScreen({ navigation }) {
           />
           <TouchableOpacity onPress={pickImage}>
             {image ? (
-              <Image source={{ uri: image }} style={{ width: 200, height: 200, borderRadius: 100 }} />
+              <Image source={{ uri: image }} style={{ width: 150, height: 150, borderRadius: 100 }} />
             ) : (
-              <Image source={require('../assets/path_to_default_image.png')} style={{ width: 200, height: 200, borderRadius: 100 }} />
+              <Image source={require('../assets/path_to_default_image.png')} style={{ width: 150, height: 150, borderRadius: 100 }} />
             )}
           </TouchableOpacity>
           <TextInput
@@ -154,6 +153,9 @@ export default function EditScreen({ navigation }) {
             returnKeyType="next"
             value={phone.value}
             onChangeText={(text) => setPhone({ value: text, error: '' })}
+            autoCompleteType="tel"
+            textContentType="telephoneNumber"
+            keyboardType="phone-pad"
           />
           <TextInput
             label="Facebook"
@@ -187,6 +189,6 @@ const styles = StyleSheet.create({
   leftIcon: {
     position: 'absolute',
     left: 1,
-    top: 20,
+    top: 30,
   }
 });

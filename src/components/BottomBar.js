@@ -34,10 +34,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'white',
         padding: 25,
-        borderWidth: 1,
+        // borderWidth: 1,
         borderColor: 'lightgray',
-        borderTopEndRadius: 10,
-        borderTopStartRadius: 10,
+        borderTopEndRadius: 20,
+        borderTopStartRadius: 20,
+        shadowColor: 'black',      // Màu của shadow
+        shadowOffset: {
+            width: 0,              // Điều chỉnh độ dài và độ rộng của shadow
+            height: 0,
+        },
+        shadowOpacity: 0.5,        // Điều chỉnh độ trong suốt của shadow
+        shadowRadius: 3, 
     },
     bottomBarItem: {
         alignItems: 'center',
