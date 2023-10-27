@@ -300,6 +300,7 @@ const styles = StyleSheet.create({
         margin: 10,
         padding: 5,
         marginBottom: 5,
+        
     },
     icon: {
         // borderWidth: 1,

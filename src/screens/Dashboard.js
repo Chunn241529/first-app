@@ -257,10 +257,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#ffffff',
         // borderWidth: 1,
-        borderRadius: 10,
+        borderRadius: 20,
         margin: 10,
         padding: 10,
         marginBottom: 10,
+        shadowColor: 'black',      // Màu của shadow
+        shadowOffset: {
+            width: 0,              // Điều chỉnh độ dài và độ rộng của shadow
+            height: 0,
+        },
+        shadowOpacity: 0.5,       // Điều chỉnh độ trong suốt của shadow
+        shadowRadius: 3,
     },
     userImage: {
         width: 80,
