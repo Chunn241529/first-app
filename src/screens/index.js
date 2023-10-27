@@ -5,3 +5,5 @@ export { default as ResetPasswordScreen } from './ResetPasswordScreen';
 export { default as ProfileScreen } from './ProfileScreen';
 export { default as EditScreen } from './EditScreen';
 export { default as Dashboard } from './Dashboard';
+export { default as AddScreen } from './AddScreen';
+export { default as UserScreen } from './UserScreen';

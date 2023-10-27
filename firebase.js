@@ -1,16 +1,15 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from 'firebase/auth';
-import { getDatabase } from 'firebase/database';
+import { getDatabase, onValue } from 'firebase/database';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyB1Cmz_hrf5UL2kKia-WZuMX4FKdFHcURg",
-    authDomain: "test-1544c.firebaseapp.com",
-    databaseURL: "https://test-1544c-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "test-1544c",
-    storageBucket: "test-1544c.appspot.com",
-    messagingSenderId: "546342325481",
-    appId: "1:546342325481:web:7a74f2fb0422dabba17478",
-    measurementId: "G-7ETBS2N41H"
+    apiKey: "AIzaSyDTrACWGa0IDRhZYNTYicDDLRR-7xBJH2Y",
+    authDomain: "cardlink-3bd0a.firebaseapp.com",
+    databaseURL: "https://cardlink-3bd0a-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "cardlink-3bd0a",
+    storageBucket: "cardlink-3bd0a.appspot.com",
+    messagingSenderId: "82452055217",
+    appId: "1:82452055217:web:0aba023c2d8470697ece90"
 };
 
 // Initialize Firebase

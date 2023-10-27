@@ -11,6 +11,8 @@ import {
   ProfileScreen,
   EditScreen,
   Dashboard,
+  AddScreen,
+  UserScreen,
 } from './src/screens';
 
 const Stack = createStackNavigator();
@@ -25,13 +27,15 @@ export default function App() {
             headerShown: false,
           }}
         >
+          <Stack.Screen name="StartScreen" component={StartScreen} />
           <Stack.Screen name="Dashboard" component={Dashboard} />
-          {/* <Stack.Screen name="StartScreen" component={StartScreen} /> 
+          <Stack.Screen name="AddScreen" component={AddScreen} />
           <Stack.Screen name="EditScreen" component={EditScreen} />
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
           <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
           <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
-          <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} />  */}
+          <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} />
+          <Stack.Screen name="UserScreen" component={UserScreen} />
 
         </Stack.Navigator>
       </NavigationContainer>

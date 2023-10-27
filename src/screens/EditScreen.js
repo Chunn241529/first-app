@@ -128,7 +128,7 @@ export default function EditScreen({ navigation }) {
             onPress={() =>
               navigation.reset({
                 index: 0,
-                routes: [{ name: 'ProfileScreen' }],
+                routes: [{ name: 'Dashboard' }],
               })
             }
             style={styles.leftIcon}

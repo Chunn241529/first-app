@@ -31,7 +31,7 @@ export default function LoginScreen({ navigation }) {
       await signInWithEmailAndPassword(auth, email.value, password.value);
       navigation.reset({
         index: 0,
-        routes: [{ name: 'ProfileScreen' }],
+        routes: [{ name: 'Dashboard' }],
       });
     } catch (error) {
       Alert.alert('Lỗi đăng nhập', 'Đăng nhập thất bại. Vui lòng kiểm tra thông tin đăng nhập và thử lại.');
