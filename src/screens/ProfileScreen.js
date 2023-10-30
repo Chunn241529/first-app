@@ -4,12 +4,17 @@ import { Text, IconButton } from 'react-native-paper';
 import Background from '../components/Background';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Linking, Share } from 'react-native';
+import { ref, get } from 'firebase/database';
+import { auth, database } from '../../firebase';
+import { WebView } from 'react-native-webview';
+import WebViewScreen from '../components/webView';
 
 export default function ProfileScreen({ route, navigation }) {
   const { profileData } = route.params; // Lấy dữ liệu hồ sơ từ route.params
-
+  const userId = auth.currentUser.uid;
   // Sử dụng profileData để hiển thị thông tin hồ sơ
   const [userData, setUserData] = useState({
+    id: profileData.id,
     image: profileData.image,
     name: profileData.name,
     phone: profileData.phone,
@@ -20,8 +25,27 @@ export default function ProfileScreen({ route, navigation }) {
   });
 
   const [profileURL, setProfileURL] = useState('');
+  const [showWebView, setShowWebView] = useState(false);
+  const [webViewUrl, setWebViewUrl] = useState('');
+  // const profileURL = `http://192.168.1.3:5500/detail.html?userId=${userId}&profileId=${profileData.id}`;
+  // const handleShare = () => {
+  //   const NFC = `http://192.168.1.3:5500/NFC.html`;
+  //   setWebViewUrl(NFC);
+  //   setShowWebView(true);
+  // };
+  // const handleGoBack = () => {
+  //   setShowWebView(false);
+  // };
 
-  // Đừng thực hiện lấy dữ liệu từ Firebase ở đây, vì chúng ta đã có dữ liệu từ profileData
+  // if (showWebView) {
+  //   return <WebViewScreen url={webViewUrl} onGoBack={handleGoBack} />;
+  // }
+
+  const handleShare = () => {
+    const profileURL = `http://192.168.1.3:5500/detail.html?userId=${userId}&profileId=${profileData.id}`;
+    Linking.openURL(profileURL); // Mở trang web trực tiếp trong trình duyệt
+  };
+
 
   return (
     <Background>
@@ -94,11 +118,7 @@ export default function ProfileScreen({ route, navigation }) {
             name="share"
             style={styles.icon}
             size={30}
-            onPress={() => {
-              Share.share({
-                message: `${profileURL}`,
-              });
-            }}
+            onPress={handleShare}
           />
         </View>
       </View>
@@ -162,5 +182,8 @@ const styles = StyleSheet.create({
   rightIcon: {
     position: 'absolute',
     right: 1,
-  }
+  },
+  webView: {
+    flex: 1,
+  },
 });

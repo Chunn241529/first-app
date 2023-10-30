@@ -64,9 +64,9 @@ export default function Dashboard({ navigation }) {
                     get(profilesRef)
                         .then((profilesSnapshot) => {
                             if (profilesSnapshot.exists()) {
-                                // Chuyển dữ liệu từ snapshot thành một mảng các profiles
-                                const profilesData = Object.values(profilesSnapshot.val());
-                                setUserProfiles(profilesData);
+                                const profilesData = profilesSnapshot.val();
+                                const profilesArray = Object.entries(profilesData).map(([id, profile]) => ({ id, ...profile }));
+                                setUserProfiles(profilesArray);
                             }
                         })
                         .catch((error) => {
