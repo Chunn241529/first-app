@@ -4,6 +4,7 @@ import { Text, IconButton } from 'react-native-paper';
 import Background from '../components/Background';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Linking, Share } from 'react-native';
+import { initNfc, readNdef, writeNdef, stopNfc } from '../components/NFCManager';
 
 export default function ProfileScreen({ route, navigation }) {
   const { profileData } = route.params; // Lấy dữ liệu hồ sơ từ route.params
