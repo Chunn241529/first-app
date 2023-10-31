@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Image, Alert } from 'react-native';
+import { View, StyleSheet, Image, Alert, TouchableOpacity } from 'react-native';
 import { Text, IconButton } from 'react-native-paper';
 import Background from '../components/Background';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Linking, Share } from 'react-native';
+import { ref, get } from 'firebase/database';
+import { auth, database } from '../../firebase';
 
 export default function ProfileScreen({ route, navigation }) {
   const { profileData } = route.params; // Lấy dữ liệu hồ sơ từ route.params
@@ -38,7 +40,7 @@ export default function ProfileScreen({ route, navigation }) {
   // }
 
   const handleShare = () => {
-    const profileURL = `http://192.168.1.3:5500/detail.html?userId=${userId}&profileId=${profileData.id}`;
+    const profileURL = `http://192.168.1.42:5500/first-app/NFC.html?userId=${userId}&profileId=${profileData.id}`;
     Linking.openURL(profileURL); // Mở trang web trực tiếp trong trình duyệt
   };
 
@@ -110,12 +112,18 @@ export default function ProfileScreen({ route, navigation }) {
               }
             }}
           />
-          <Icon
-            name="share"
+          <TouchableOpacity
+            style={styles.icon}
+            onPress={handleShare}
+          >
+            <Text style={{ fontSize: 30, color: '#3B5998', fontWeight: 'bold', }}>NFC</Text>
+          </TouchableOpacity>
+          {/* <Icon
+            name="credit-card"
             style={styles.icon}
             size={30}
             onPress={handleShare}
-          />
+          /> */}
         </View>
       </View>
     </Background>

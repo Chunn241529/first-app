@@ -39,8 +39,7 @@ export default function UserProfileScreen({ navigation }) {
                     });
 
                     // Tạo URL cho trang profile
-                    const profileURL = `http://192.168.1.42:5500/CardLink/detail.html?id=${userId}`;
-                    setProfileURL(profileURL); // Thay 'example.com' bằng domain thực tế của bạn
+      
                 } else {
                     console.log('Không tìm thấy dữ liệu người dùng.');
                     Alert.alert('Lỗi dữ liệu!', 'Không tìm thấy dữ liệu người dùng..', [
@@ -129,7 +128,10 @@ export default function UserProfileScreen({ navigation }) {
                         <TouchableOpacity
                             style={styles.userProfileItem}
                             onPress={() => {
-                                Alert.alert('Tính năng chưa hoạt động', 'Bạn hãy cố gắng chờ tính năng này ra mắt nhé.')
+                                navigation.reset({
+                                    index: 0,
+                                    routes: [{ name: 'NFCListScreen' }],
+                                });
                             }}
 
                         >
@@ -300,7 +302,7 @@ const styles = StyleSheet.create({
         margin: 10,
         padding: 5,
         marginBottom: 5,
-        
+
     },
     icon: {
         // borderWidth: 1,

@@ -14,6 +14,9 @@ import {
   AddScreen,
   UserScreen,
   UserProfileScreen,
+  NFCListScreen,
+  NFCDetailScreen,
+  EditProfileScreen,
 } from './src/screens';
 
 const Stack = createStackNavigator();
@@ -38,7 +41,9 @@ export default function App() {
           <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} />
           <Stack.Screen name="UserScreen" component={UserScreen} />
           <Stack.Screen name="UserProfileScreen" component={UserProfileScreen} />
-
+          <Stack.Screen name="NFCListScreen" component={NFCListScreen} />
+          <Stack.Screen name="NFCDetailScreen" component={NFCDetailScreen} />
+          <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>

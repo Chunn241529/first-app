@@ -20,14 +20,12 @@ const database = getDatabase(app); // Khởi tạo Firebase Realtime Database
 
 const profileImage = document.getElementById("profile-image");
 const profileName = document.getElementById("profile-name");
-const profileRole = document.getElementById("profile-role");
+const profilecompanyName = document.getElementById("profile-companyName");
 const profilePhone = document.getElementById("profile-phone");
 const profileDescription = document.getElementById("profile-description"); // Thêm tham chiếu đến trường Description
 const profileFacebook = document.getElementById("profile-facebook");
 const profileLinkedIn = document.getElementById("profile-linkedin"); // Thay đổi tham chiếu từ profileZalo thành profileLinkedIn
-const editProfileButton = document.getElementById("edit-profile");
-const deleteProfileButton = document.getElementById("delete-profile");
-const card = document.getElementById("selected-card-detail");
+
 
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -42,19 +40,14 @@ if (profileId !== null) {
         .then((snapshot) => {
             if (snapshot.exists()) {
                 const profile = snapshot.val();
-                const templateValue = profile.template
 
                 profileImage.src = profile.image;
                 profileName.textContent = profile.name;
-                profileRole.textContent = profile.roleUser;
+                profilecompanyName.textContent = profile.companyName;
                 profilePhone.href = 'tel:' + profile.phone;
                 profileDescription.textContent = profile.description; // Hiển thị trường Description
                 profileFacebook.href = profile.facebook;
                 profileLinkedIn.href = profile.linkedin;
-
-
-
-                
             } else {
                 console.error("Không tìm thấy profile.");
             }

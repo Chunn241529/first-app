@@ -8,3 +8,6 @@ export { default as Dashboard } from './Dashboard';
 export { default as AddScreen } from './AddScreen';
 export { default as UserScreen } from './UserScreen';
 export { default as UserProfileScreen } from './UserProfileScreen'
+export { default as NFCListScreen } from './NFCListScreen'
+export { default as NFCDetailScreen } from './NFCDetailScreen'
+export { default as EditProfileScreen } from './EditProfileScreen'
