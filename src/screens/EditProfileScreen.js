@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, Alert, Keyboard, TouchableWithoutFeedback, Image, ScrollView } from 'react-native';
 import { Text, IconButton } from 'react-native-paper';
 import Background from '../components/Background';
@@ -6,46 +6,27 @@ import Button from '../components/Button';
 import TextInput from '../components/TextInput';
 import { theme } from '../core/theme';
 import * as ImagePicker from 'expo-image-picker';
-import { ref, set, get } from 'firebase/database';
+import { ref, set } from 'firebase/database';
 import { database, auth } from '../../firebase'; // Import Firebase configuration
-import { getStorage, ref as storageRef1, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 export default function EditProfileScreen({ route, navigation }) {
-    const [name, setName] = useState({ value: '', error: '' });
-    const [companyName, setCompanyName] = useState({ value: '', error: '' });
-    const [phone, setPhone] = useState({ value: '', error: '' });
-    const [facebook, setFacebook] = useState({ value: '', error: '' });
-    const [linkedin, setLinkedin] = useState({ value: '', error: '' });
-    const [description, setDescription] = useState({ value: '', error: '' });
+    const { profileData } = route.params;
+    const [editedUserData, setEditedUserData] = useState({
+        id: profileData.id,
+        image: profileData.image,
+        name: profileData.name,
+        phone: profileData.phone,
+        companyName: profileData.companyName,
+        description: profileData.description,
+        facebook: profileData.facebook,
+        linkedin: profileData.linkedin,
+    });
     const [image, setImage] = useState(null);
 
-    useEffect(() => {
-        fetchDataFromDatabase();
-    }, []);
-
-    const fetchDataFromDatabase = async () => {
-        try {
-            const { profileData } = route.params;
-            const userUid = auth.currentUser.uid;
-            // const userRef = ref(database, `users/${userUid}`);
-            const userSnapshot = await get(profileData);
-
-            if (userSnapshot.exists()) {
-                const userData = userSnapshot.val();
-                setName({ value: userData.name, error: '' });
-                setCompanyName({ value: userData.companyName, error: '' });
-                setPhone({ value: userData.phone, error: '' });
-                setFacebook({ value: userData.facebook, error: '' });
-                setLinkedin({ value: userData.linkedin, error: '' });
-                setDescription({ value: userData.description, error: '' });
-                setImage(userData.image);
-                setProfiles(userData.profiles); // Lấy giá trị trường "profiles"
-            }
-        } catch (error) {
-            console.error('Lỗi khi lấy dữ liệu từ cơ sở dữ liệu:', error);
-        }
+    const handleInputChange = (field, value) => {
+        setEditedUserData({ ...editedUserData, [field]: value });
     };
-
     const onSavePressed = async () => {
         try {
             if (!image) {
@@ -56,18 +37,14 @@ export default function EditProfileScreen({ route, navigation }) {
             const imageURL = await uploadImage(image);
 
             const userUid = auth.currentUser.uid;
-            const userRef = ref(database, `users/${userUid}`);
+            const userRef = ref(database, `users/${userUid}/profiles/${profileData.id}`);
 
-            // Chỉ cập nhật các trường đã thay đổi và giữ nguyên trường "profiles"
-            await set(userRef, {
-                name: name.value,
-                companyName: companyName.value,
-                phone: phone.value,
-                facebook: facebook.value,
-                linkedin: linkedin.value,
-                description: description.value,
-                image: imageURL,
-            });
+            const updatedUserData = {
+                ...editedUserData,
+                image: imageURL, // Update the image with the new one
+            };
+
+            await set(userRef, updatedUserData);
 
             Alert.alert('Cập nhật thành công!', 'Thông tin của bạn đã được cập nhật.');
 
@@ -103,11 +80,12 @@ export default function EditProfileScreen({ route, navigation }) {
 
     const uploadImage = async (uri) => {
         const storage = getStorage();
-        const storageRef = storageRef1(storage, 'avatars/' + auth.currentUser.uid + '/' + new Date().getTime() + '.jpg');
+        const storageRef1 = storageRef(storage, 'avatars/' + auth.currentUser.uid + '/' + new Date().getTime() + '.jpg');
         const response = await fetch(uri);
         const blob = await response.blob();
-        const snapshot = await uploadBytes(storageRef, blob);
-        return getDownloadURL(snapshot.ref);
+        const snapshot = await uploadBytes(storageRef1, blob);
+        const imageURL = await getDownloadURL(snapshot.ref);
+        return imageURL;
     };
 
     return (
@@ -130,26 +108,26 @@ export default function EditProfileScreen({ route, navigation }) {
                         {image ? (
                             <Image source={{ uri: image }} style={{ width: 150, height: 150, borderRadius: 100 }} />
                         ) : (
-                            <Image source={require('../assets/path_to_default_image.png')} style={{ width: 150, height: 150, borderRadius: 100 }} />
+                            <Image source={{ uri: editedUserData.image }} style={{ width: 150, height: 150, borderRadius: 100 }} />
                         )}
                     </TouchableOpacity>
                     <TextInput
                         label="Họ và tên"
                         returnKeyType="next"
-                        value={name.value}
-                        onChangeText={(text) => setName({ value: text, error: '' })}
+                        value={editedUserData.name}
+                        onChangeText={(text) => handleInputChange('name', text)}
                     />
                     <TextInput
                         label="Tên công ty"
                         returnKeyType="next"
-                        value={companyName.value}
-                        onChangeText={(text) => setCompanyName({ value: text, error: '' })}
+                        value={editedUserData.companyName}
+                        onChangeText={(text) => handleInputChange('companyName', text)}
                     />
                     <TextInput
                         label="Số điện thoại"
                         returnKeyType="next"
-                        value={phone.value}
-                        onChangeText={(text) => setPhone({ value: text, error: '' })}
+                        value={editedUserData.phone}
+                        onChangeText={(text) => handleInputChange('phone', text)}
                         autoCompleteType="tel"
                         textContentType="telephoneNumber"
                         keyboardType="phone-pad"
@@ -157,20 +135,20 @@ export default function EditProfileScreen({ route, navigation }) {
                     <TextInput
                         label="Facebook"
                         returnKeyType="next"
-                        value={facebook.value}
-                        onChangeText={(text) => setFacebook({ value: text, error: '' })}
+                        value={editedUserData.facebook}
+                        onChangeText={(text) => handleInputChange('facebook', text)}
                     />
                     <TextInput
                         label="LinkedIn"
                         returnKeyType="next"
-                        value={linkedin.value}
-                        onChangeText={(text) => setLinkedin({ value: text, error: '' })}
+                        value={editedUserData.linkedin}
+                        onChangeText={(text) => handleInputChange('linkedin', text)}
                     />
                     <TextInput
                         label="Mô tả bản thân"
                         returnKeyType="done"
-                        value={description.value}
-                        onChangeText={(text) => setDescription({ value: text, error: '' })}
+                        value={editedUserData.description}
+                        onChangeText={(text) => handleInputChange('description', text)}
                         multiline
                     />
                     <Button mode="contained" onPress={onSavePressed} style={{ marginTop: 24 }}>

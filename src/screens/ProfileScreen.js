@@ -65,9 +65,8 @@ export default function ProfileScreen({ route, navigation }) {
           color="#000"
           size={20}
           onPress={() =>
-            navigation.reset({
-              index: 0,
-              routes: [{ name: 'EditScreen' }],
+            navigation.navigate('EditProfileScreen', {
+              profileData: userData,
             })
           }
           style={styles.rightIcon}
