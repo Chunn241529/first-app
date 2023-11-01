@@ -40,7 +40,7 @@ export default function ProfileScreen({ route, navigation }) {
   // }
 
   const handleShare = () => {
-    const profileURL = `http://192.168.1.42:5500/first-app/NFC.html?userId=${userId}&profileId=${profileData.id}`;
+    const profileURL = `https://chunn241529.github.io/first-app/NFC.html?userId=${userId}&profileId=${profileData.id}`;
     Linking.openURL(profileURL); // Mở trang web trực tiếp trong trình duyệt
   };
 
