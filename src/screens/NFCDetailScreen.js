@@ -30,7 +30,7 @@ export default function NFCDetailScreen({ route, navigation }) {
 
 
     const handleShare = () => {
-        const profileURL = `https://chunn241529.github.io/first-app/CardLink/NFC.html?userId=${userId}&profileId=${profileData.id}`;
+        const profileURL = `https://chunn241529.github.io/first-app/NFC.html?userId=${userId}&profileId=${profileData.id}`;
         Linking.openURL(profileURL); // Mở trang web trực tiếp trong trình duyệt
     };
 
