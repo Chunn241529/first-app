@@ -8,6 +8,7 @@ import { ref, get } from 'firebase/database';
 import { auth, database } from '../../firebase';
 import Button from '../components/Button';
 import BackButton from '../components/BackButton';
+import { initNfc, readNdef, writeNdef, stopNfc } from '../components/NFCManager';
 
 export default function NFCDetailScreen({ route, navigation }) {
     const { profileData } = route.params; // Lấy dữ liệu hồ sơ từ route.params
@@ -24,14 +25,32 @@ export default function NFCDetailScreen({ route, navigation }) {
         linkedin: profileData.linkedin,
     });
 
-    const [profileURL, setProfileURL] = useState('');
-    const [showWebView, setShowWebView] = useState(false);
-    const [webViewUrl, setWebViewUrl] = useState('');
+    // const [profileURL, setProfileURL] = useState('');
+    // const [showWebView, setShowWebView] = useState(false);
+    // const [webViewUrl, setWebViewUrl] = useState('');
+    useEffect(() => {
+        // Khởi tạo NFC khi màn hình được tải
+        initNfc();
 
+        return () => {
+            // Dừng NFC khi màn hình bị unmount
+            stopNfc();
+        };
+    }, []);
 
-    const handleShare = () => {
+    // const handleShare = () => {
+    // const profileURL = `https://chunn241529.github.io/first-app/NFC.html?userId=${userId}&profileId=${profileData.id}`;
+    //     Linking.openURL(profileURL); // Mở trang web trực tiếp trong trình duyệt
+    // };
+    const handleWriteNfc = async () => {
         const profileURL = `https://chunn241529.github.io/first-app/NFC.html?userId=${userId}&profileId=${profileData.id}`;
-        Linking.openURL(profileURL); // Mở trang web trực tiếp trong trình duyệt
+        const dataToWrite = profileURL;
+        try {
+            const result = await writeNdef(dataToWrite);
+            Alert.alert('Ghi dữ liệu thành công', '');
+        } catch (error) {
+            Alert.alert('Ghi dữ liệu thất bại', 'Không tìm thấy thẻ để ghi dữ liệu.');
+        }
     };
 
 
@@ -39,8 +58,8 @@ export default function NFCDetailScreen({ route, navigation }) {
         <Background>
             <BackButton goBack={navigation.goBack} />
             <Button mode="contained"
-                onPress={handleShare}
-            >Truy cập liên kết</Button>
+                onPress={handleWriteNfc}
+            >Ghi dữ liệu</Button>
         </Background >
     );
 

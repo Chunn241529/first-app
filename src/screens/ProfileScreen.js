@@ -22,9 +22,9 @@ export default function ProfileScreen({ route, navigation }) {
     linkedin: profileData.linkedin,
   });
 
-  const [profileURL, setProfileURL] = useState('');
-  const [showWebView, setShowWebView] = useState(false);
-  const [webViewUrl, setWebViewUrl] = useState('');
+  // const [profileURL, setProfileURL] = useState('');
+  // const [showWebView, setShowWebView] = useState(false);
+  // const [webViewUrl, setWebViewUrl] = useState('');
   // const profileURL = `http://192.168.1.3:5500/detail.html?userId=${userId}&profileId=${profileData.id}`;
   // const handleShare = () => {
   //   const NFC = `http://192.168.1.3:5500/NFC.html`;
@@ -39,11 +39,30 @@ export default function ProfileScreen({ route, navigation }) {
   //   return <WebViewScreen url={webViewUrl} onGoBack={handleGoBack} />;
   // }
 
-  const handleShare = () => {
-    const profileURL = `https://chunn241529.github.io/first-app/NFC.html?userId=${userId}&profileId=${profileData.id}`;
-    Linking.openURL(profileURL); // Mở trang web trực tiếp trong trình duyệt
-  };
+  useEffect(() => {
+    // Khởi tạo NFC khi màn hình được tải
+    initNfc();
 
+    return () => {
+      // Dừng NFC khi màn hình bị unmount
+      stopNfc();
+    };
+  }, []);
+
+  // const handleShare = () => {
+  // const profileURL = `https://chunn241529.github.io/first-app/NFC.html?userId=${userId}&profileId=${profileData.id}`;
+  //     Linking.openURL(profileURL); // Mở trang web trực tiếp trong trình duyệt
+  // };
+  const handleWriteNfc = async () => {
+    const profileURL = `https://chunn241529.github.io/first-app/NFC.html?userId=${userId}&profileId=${profileData.id}`;
+    const dataToWrite = profileURL;
+    try {
+      const result = await writeNdef(dataToWrite);
+      Alert.alert('Ghi dữ liệu thành công', '');
+    } catch (error) {
+      Alert.alert('Ghi dữ liệu thất bại', 'Không tìm thấy thẻ để ghi dữ liệu.');
+    }
+  };
 
   return (
     <Background>
@@ -113,7 +132,7 @@ export default function ProfileScreen({ route, navigation }) {
           />
           <TouchableOpacity
             style={styles.icon}
-            onPress={handleShare}
+            onPress={handleWriteNfc}
           >
             <Text style={{ fontSize: 30, color: '#3B5998', fontWeight: 'bold', }}>NFC</Text>
           </TouchableOpacity>
