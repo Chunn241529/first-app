@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { Linking, Share } from 'react-native';
 import { ref, get } from 'firebase/database';
 import { auth, database } from '../../firebase';
+import { initNfc, stopNfc, writeNdef } from '../components/NFCManager'; // Import các hàm từ NFCManager
 
 export default function ProfileScreen({ route, navigation }) {
   const { profileData } = route.params; // Lấy dữ liệu hồ sơ từ route.params
@@ -55,12 +56,11 @@ export default function ProfileScreen({ route, navigation }) {
   // };
   const handleWriteNfc = async () => {
     const profileURL = `https://chunn241529.github.io/first-app/NFC.html?userId=${userId}&profileId=${profileData.id}`;
-    const dataToWrite = profileURL;
     try {
-      const result = await writeNdef(dataToWrite);
-      Alert.alert('Ghi dữ liệu thành công', '');
+      const result = await writeNdef(profileURL);
+      Alert.alert('Write Status', result);
     } catch (error) {
-      Alert.alert('Ghi dữ liệu thất bại', 'Không tìm thấy thẻ để ghi dữ liệu.');
+      Alert.alert('Write Status', 'Write Failed');
     }
   };
 
