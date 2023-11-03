@@ -43,7 +43,7 @@ export default function NFCDetailScreen({ route, navigation }) {
     //     Linking.openURL(profileURL); // Mở trang web trực tiếp trong trình duyệt
     // };
     const handleWriteNfc = async () => {
-        const profileURL = `https://chunn241529.github.io/first-app/NFC.html?userId=${userId}&profileId=${profileData.id}`;
+        const profileURL = `https://chunn241529.github.io/first-app/index.html?userId=${userId}&profileId=${profileData.id}`;
 
         try {
             const result = await writeNdef(profileURL);
