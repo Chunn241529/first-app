@@ -58,9 +58,9 @@ export default function ProfileScreen({ route, navigation }) {
     const profileURL = `https://chunn241529.github.io/first-app/NFC.html?userId=${userId}&profileId=${profileData.id}`;
     try {
       const result = await writeNdef(profileURL);
-      Alert.alert('Write Status', result);
+      Alert.alert('Thành công', result);
     } catch (error) {
-      Alert.alert('Write Status', 'Write Failed');
+      Alert.alert('Thất bại', 'Write Failed');
     }
   };
 

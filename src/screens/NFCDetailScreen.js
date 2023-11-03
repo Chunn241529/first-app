@@ -44,10 +44,10 @@ export default function NFCDetailScreen({ route, navigation }) {
     // };
     const handleWriteNfc = async () => {
         const profileURL = `https://chunn241529.github.io/first-app/NFC.html?userId=${userId}&profileId=${profileData.id}`;
-        const dataToWrite = profileURL;
+
         try {
-            const result = await writeNdef(dataToWrite);
-            Alert.alert('Ghi dữ liệu thành công', '');
+            const result = await writeNdef(profileURL);
+            Alert.alert('Ghi dữ liệu thành công', result);
         } catch (error) {
             Alert.alert('Ghi dữ liệu thất bại', 'Không tìm thấy thẻ để ghi dữ liệu.');
         }

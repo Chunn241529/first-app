@@ -20,15 +20,19 @@ export async function readNdef() {
     }
 }
 
-export async function writeNdef(data) {
+export async function writeNdef(url) {
     try {
-        await NfcManager.requestTechnology([NfcTech.Ndef]);
-        const bytes = NfcManager.stringToBytes(data);
-        const result = await NfcManager.ndefHandler(bytes);
+        await NfcManager.requestTechnology(NfcTech.Ndef);
+
+        const ndefPayload = NfcManager.uriToNdef(url);
+        const ndefRecord = NfcManager.createNdefRecord(NfcTech.Ndef, ndefPayload);
+
+        const ndefMessage = [ndefRecord];
+
+        const result = await NfcManager.ndefHandler(ndefMessage);
         return result;
     } catch (ex) {
-        // Xử lý lỗi khi ghi tag
-        console.warn(ex);
+        console.warn('Error writing URL to NFC tag:', ex);
         throw ex;
     } finally {
         NfcManager.cancelTechnologyRequest();
