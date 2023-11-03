@@ -103,8 +103,9 @@ export default function UserProfileScreen({ navigation }) {
                         <TouchableOpacity
                             style={styles.userProfileItem}
                             onPress={() => {
-                                Share.share({
-                                    message: `${profileURL}`,
+                                navigation.reset({
+                                    index: 0,
+                                    routes: [{ name: 'NFCListScreen' }],
                                 });
                             }}
 

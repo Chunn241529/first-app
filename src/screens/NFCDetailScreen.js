@@ -28,15 +28,7 @@ export default function NFCDetailScreen({ route, navigation }) {
     // const [profileURL, setProfileURL] = useState('');
     // const [showWebView, setShowWebView] = useState(false);
     // const [webViewUrl, setWebViewUrl] = useState('');
-    useEffect(() => {
-        // Khởi tạo NFC khi màn hình được tải
-        initNfc();
 
-        return () => {
-            // Dừng NFC khi màn hình bị unmount
-            stopNfc();
-        };
-    }, []);
 
     const handleShare = () => {
         const profileURL = `https://chunn241529.github.io/first-app/index.html?userId=${userId}&profileId=${profileData.id}`;
@@ -64,7 +56,7 @@ export default function NFCDetailScreen({ route, navigation }) {
             <BackButton goBack={navigation.goBack} />
             <Button mode="contained"
                 onPress={handleShare}
-            >Ghi dữ liệu</Button>
+            >Chia sẻ liên kết</Button>
         </Background >
     );
 

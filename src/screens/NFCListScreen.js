@@ -55,7 +55,7 @@ export default function NFCListScreen({ navigation }) {
                     });
 
                     // Tạo URL cho trang profile
-             
+
 
                     // Lấy dữ liệu từ bảng "profiles"
                     const profilesRef = ref(database, `users/${userId}/profiles`);
@@ -90,6 +90,7 @@ export default function NFCListScreen({ navigation }) {
             });
     }, []);
 
+   
     return (
         <ImageBackground
             source={require('../assets/background_dot.png')}

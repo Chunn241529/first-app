@@ -39,15 +39,7 @@ export default function ProfileScreen({ route, navigation }) {
   //   return <WebViewScreen url={webViewUrl} onGoBack={handleGoBack} />;
   // }
 
-  useEffect(() => {
-    // Khởi tạo NFC khi màn hình được tải
-    initNfc();
 
-    return () => {
-      // Dừng NFC khi màn hình bị unmount
-      stopNfc();
-    };
-  }, []);
 
   const handleShare = () => {
     const profileURL = `https://chunn241529.github.io/first-app/index.html?userId=${userId}&profileId=${profileData.id}`;
@@ -58,6 +50,7 @@ export default function ProfileScreen({ route, navigation }) {
       .then(result => console.log(result))
       .catch(error => console.log(error));
   };
+
   return (
     <Background>
       <View style={styles.card}>
@@ -125,7 +118,7 @@ export default function ProfileScreen({ route, navigation }) {
             }}
           />
           <Icon
-            name="credit-card"
+            name="share"
             style={styles.icon}
             size={30}
             onPress={handleShare}
