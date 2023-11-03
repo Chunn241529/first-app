@@ -6,7 +6,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { Linking, Share } from 'react-native';
 import { ref, get } from 'firebase/database';
 import { auth, database } from '../../firebase';
-import { initNfc, stopNfc, writeNdef } from '../components/NFCManager'; // Import các hàm từ NFCManager
 
 export default function ProfileScreen({ route, navigation }) {
   const { profileData } = route.params; // Lấy dữ liệu hồ sơ từ route.params
@@ -50,20 +49,15 @@ export default function ProfileScreen({ route, navigation }) {
     };
   }, []);
 
-  // const handleShare = () => {
-  // const profileURL = `https://chunn241529.github.io/first-app/NFC.html?userId=${userId}&profileId=${profileData.id}`;
-  //     Linking.openURL(profileURL); // Mở trang web trực tiếp trong trình duyệt
-  // };
-  const handleWriteNfc = async () => {
-    const profileURL = `https://chunn241529.github.io/first-app/index.html?userId=${userId}&profileId=${profileData.id}`;
-    try {
-      const result = await writeNdef(profileURL);
-      Alert.alert('Thành công', result);
-    } catch (error) {
-      Alert.alert('Thất bại', 'Write Failed');
-    }
+  const handleShare = () => {
+    const profileURL = `https://chunn241529.github.io/first-app/NFC.html?userId=${userId}&profileId=${profileData.id}`;
+    Share.share({
+      message: profileURL,
+      title: 'Chia sẻ thông tin hồ sơ'
+    })
+      .then(result => console.log(result))
+      .catch(error => console.log(error));
   };
-
   return (
     <Background>
       <View style={styles.card}>
@@ -130,18 +124,12 @@ export default function ProfileScreen({ route, navigation }) {
               }
             }}
           />
-          <TouchableOpacity
-            style={styles.icon}
-            onPress={handleWriteNfc}
-          >
-            <Text style={{ fontSize: 30, color: '#3B5998', fontWeight: 'bold', }}>NFC</Text>
-          </TouchableOpacity>
-          {/* <Icon
+          <Icon
             name="credit-card"
             style={styles.icon}
             size={30}
             onPress={handleShare}
-          /> */}
+          />
         </View>
       </View>
     </Background>

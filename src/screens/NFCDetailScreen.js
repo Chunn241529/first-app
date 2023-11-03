@@ -8,7 +8,7 @@ import { ref, get } from 'firebase/database';
 import { auth, database } from '../../firebase';
 import Button from '../components/Button';
 import BackButton from '../components/BackButton';
-import { initNfc, readNdef, writeNdef, stopNfc } from '../components/NFCManager';
+
 
 export default function NFCDetailScreen({ route, navigation }) {
     const { profileData } = route.params; // Lấy dữ liệu hồ sơ từ route.params
@@ -38,27 +38,32 @@ export default function NFCDetailScreen({ route, navigation }) {
         };
     }, []);
 
-    // const handleShare = () => {
-    // const profileURL = `https://chunn241529.github.io/first-app/NFC.html?userId=${userId}&profileId=${profileData.id}`;
-    //     Linking.openURL(profileURL); // Mở trang web trực tiếp trong trình duyệt
-    // };
-    const handleWriteNfc = async () => {
-        const profileURL = `https://chunn241529.github.io/first-app/index.html?userId=${userId}&profileId=${profileData.id}`;
-
-        try {
-            const result = await writeNdef(profileURL);
-            Alert.alert('Ghi dữ liệu thành công', result);
-        } catch (error) {
-            Alert.alert('Ghi dữ liệu thất bại', 'Không tìm thấy thẻ để ghi dữ liệu.');
-        }
+    const handleShare = () => {
+        const profileURL = `https://chunn241529.github.io/first-app/NFC.html?userId=${userId}&profileId=${profileData.id}`;
+        Share.share({
+            message: profileURL,
+            title: 'Chia sẻ thông tin hồ sơ'
+        })
+            .then(result => console.log(result))
+            .catch(error => console.log(error));
     };
+    // const handleWriteNfc = async () => {
+    //     const profileURL = `https://chunn241529.github.io/first-app/index.html?userId=${userId}&profileId=${profileData.id}`;
+
+    //     try {
+    //         const result = await writeNdef(profileURL);
+    //         Alert.alert('Ghi dữ liệu thành công', result);
+    //     } catch (error) {
+    //         Alert.alert('Ghi dữ liệu thất bại', 'Không tìm thấy thẻ để ghi dữ liệu.');
+    //     }
+    // };
 
 
     return (
         <Background>
             <BackButton goBack={navigation.goBack} />
             <Button mode="contained"
-                onPress={handleWriteNfc}
+                onPress={handleShare}
             >Ghi dữ liệu</Button>
         </Background >
     );
