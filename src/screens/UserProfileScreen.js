@@ -39,7 +39,7 @@ export default function UserProfileScreen({ navigation }) {
                     });
 
                     // Tạo URL cho trang profile
-      
+
                 } else {
                     console.log('Không tìm thấy dữ liệu người dùng.');
                     Alert.alert('Lỗi dữ liệu!', 'Không tìm thấy dữ liệu người dùng..', [
@@ -125,7 +125,7 @@ export default function UserProfileScreen({ navigation }) {
                                 style={styles.right_icon}
                             />
                         </TouchableOpacity>
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             style={styles.userProfileItem}
                             onPress={() => {
                                 navigation.reset({
@@ -150,7 +150,7 @@ export default function UserProfileScreen({ navigation }) {
                                 size={30}
                                 style={[styles.right_icon]}
                             />
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                         <View style={styles.horizontalLine}></View>
                         <TouchableOpacity
                             style={styles.userProfileItem}

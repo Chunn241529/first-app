@@ -50,7 +50,7 @@ export default function ProfileScreen({ route, navigation }) {
   }, []);
 
   const handleShare = () => {
-    const profileURL = `https://chunn241529.github.io/first-app/NFC.html?userId=${userId}&profileId=${profileData.id}`;
+    const profileURL = `https://chunn241529.github.io/first-app/index.html?userId=${userId}&profileId=${profileData.id}`;
     Share.share({
       message: profileURL,
       title: 'Chia sẻ thông tin hồ sơ'
