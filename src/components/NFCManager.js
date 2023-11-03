@@ -1,8 +1,14 @@
-import { NfcManager, NfcTech } from 'react-native-nfc-manager';
+import { NfcManager, Ndef, NfcTech } from 'react-native-nfc-manager';
 
 // Khởi tạo và quản lý NFC
 export async function initNfc() {
-    await NfcManager.start();
+    try {
+        await NfcManager.start();
+        console.log('NFC initialized');
+    } catch (ex) {
+        console.warn(ex);
+        throw ex;
+    }
 }
 
 export async function readNdef() {
@@ -22,17 +28,14 @@ export async function readNdef() {
 
 export async function writeNdef(url) {
     try {
-        await NfcManager.requestTechnology(NfcTech.Ndef);
+        await NfcManager.requestTechnology([NfcTech.Ndef]);
 
-        const ndefPayload = NfcManager.uriToNdef(url);
-        const ndefRecord = NfcManager.createNdefRecord(NfcTech.Ndef, ndefPayload);
+        const bytes = Ndef.encodeMessage([Ndef.uriRecord(url)]);
+        const result = await NfcManager.ndefHandler(bytes);
 
-        const ndefMessage = [ndefRecord];
-
-        const result = await NfcManager.ndefHandler(ndefMessage);
         return result;
     } catch (ex) {
-        console.warn('Error writing URL to NFC tag:', ex);
+        console.warn(ex);
         throw ex;
     } finally {
         NfcManager.cancelTechnologyRequest();
@@ -40,5 +43,11 @@ export async function writeNdef(url) {
 }
 
 export async function stopNfc() {
-    await NfcManager.stop();
+    try {
+        await NfcManager.stop();
+        console.log('NFC stopped');
+    } catch (ex) {
+        console.warn(ex);
+        throw ex;
+    }
 }
